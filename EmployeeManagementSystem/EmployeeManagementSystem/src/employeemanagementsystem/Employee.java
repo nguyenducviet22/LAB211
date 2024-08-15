@@ -11,6 +11,7 @@ package employeemanagementsystem;
  */
 //employee information (Id, First Name, Last Name, Phone, Email, Address, DOB, Sex, Salary, Agency),
 public class Employee {
+    public static final String DATE_OF_BIRTH = "dd-MM-yyyy";
     private String id;
     private String firstName; 
     private String lastName;
