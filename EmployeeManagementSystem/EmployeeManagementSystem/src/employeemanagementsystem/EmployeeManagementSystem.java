@@ -15,13 +15,48 @@ public class EmployeeManagementSystem {
 
     private static EmployeeService employeeService;
     private static ConsoleInputService consoleInputService;
-    
+
     public static void main(String[] args) {
-        employeeService = EmployeeService.getInstance();
+        employeeService = new EmployeeService();
         consoleInputService = ConsoleInputService.getInstance();
+
+        menu();
     }
-    
-    static void printMenu(){
+
+    static void menu() {
+        printMenu();
+        boolean exit = false;
+        switch (consoleInputService.getStringFromConsole()) {
+            case "0":
+                employeeService.showAllEmployee();
+                break;
+            case "1":
+                employeeService.addEmployee();
+                break;
+            case "2":
+                employeeService.updateEmployee();
+                break;
+            case "3":
+                employeeService.removeEmployee();
+                break;
+            case "4":
+                employeeService.searchEmployee();
+                break;
+            case "5":
+                employeeService.sortEmployeeBySalary();
+                break;
+            case "6":
+                exit = true;
+                break;
+            default:
+                System.out.println("Invalid selection!");
+        }
+        if (!exit){
+            menu();
+        }
+    }
+
+    static void printMenu() {
         System.out.println("MAIN MENU");
         System.out.println("0. Show all");
         System.out.println("1. Add");

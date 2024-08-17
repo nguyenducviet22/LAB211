@@ -79,7 +79,7 @@ public class ConsoleInputService {
         return matcher.matches();
     }
     
-    public boolean isValidDate(String value, String dateFormat){
+    public boolean isValidDate(String dateFormat, String value){
         Date date = null;
         DateFormat sdf = new SimpleDateFormat(dateFormat);
         sdf.setLenient(false);
