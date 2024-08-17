@@ -11,9 +11,10 @@ package employeemanagementsystem.employee;
  */
 //employee information (Id, First Name, Last Name, Phone, Email, Address, DOB, Sex, Salary, Agency),
 public class Employee {
+
     public static final String DATE_OF_BIRTH = "dd-MM-yyyy";
     private String id;
-    private String firstName; 
+    private String firstName;
     private String lastName;
     private String phone;
     private String email;
@@ -118,7 +119,10 @@ public class Employee {
     public void setAgency(String agency) {
         this.agency = agency;
     }
-    
-    
 
+    @Override
+    public String toString() {
+        return String.format("%-8s, %-12s, %-20s, %-10s, %-30s, %-20s, %-10s, %-10s, %-20s, %-10s", 
+                id, firstName, lastName, phone, email, address, dob, sex, salary, agency);
+    }
 }

@@ -16,36 +16,28 @@ import java.util.List;
  */
 public class EmployeeService {
 
-    private static EmployeeService instance;
+//    private static EmployeeService instance;
     private List<Employee> listEmployee;
     private ConsoleInputService consoleInputService;
 
-    private EmployeeService() {
+    public EmployeeService() {
         listEmployee = new ArrayList<>();
         consoleInputService = ConsoleInputService.getInstance();
     }
 
-    public static EmployeeService getInstance() {
-        if (instance == null) {
-            instance = new EmployeeService();
-        }
-        return instance;
-    }
-
-//1. Add employees
-//2. Update employees
-//3. Remove employees
-//4. Search employees
-//5. Sort employees by salary
+//    public static EmployeeService getInstance() {
+//        if (instance == null) {
+//            instance = new EmployeeService();
+//        }
+//        return instance;
+//    }
     private Employee createNewEmployee() {
-//        Employee newEm = new Employee(inputEmployeeId(), inputEmployeeFirstName(), inputEmployeeLastName(), inputPhoneNumber(), 
-//                                    inputEmail(), inputAddress(), inputDOB(), inputSex(), inputSalary(), inputAgency());
         Employee newEm = new Employee();
         String idInput;
         do {
             idInput = inputEmployeeId();
         } while (isDuplicateId(idInput));
-        newEm.setId(inputEmployeeId());
+        newEm.setId(idInput);
         newEm.setFirstName(inputEmployeeFirstName());
         newEm.setLastName(inputEmployeeLastName());
         newEm.setPhone(inputPhoneNumber());
@@ -95,7 +87,7 @@ public class EmployeeService {
             return lNameInput;
         }
         System.out.print("Inlavid Last Name, enter again: ");
-        return inputEmployeeFirstName();
+        return inputEmployeeLastName();
     }
 
     private String inputPhoneNumber() {
@@ -135,7 +127,7 @@ public class EmployeeService {
             return dobInput;
         }
         System.out.print("Inlavid Date of birth, enter again: ");
-        return inputAddress();
+        return inputDOB();
     }
 
     private String inputSex() {
@@ -178,11 +170,23 @@ public class EmployeeService {
         return inputAgency();
     }
 
-    public void addEmployee() {
-
+    public void showAllEmployee() {
+        if (listEmployee.isEmpty()) {
+            System.out.println("The Employee list is empty!");
+        } else {
+            System.out.println("List of Employees: ");
+            for (Employee em : listEmployee) {
+                System.out.println(em);
+            }
+        }
     }
 
-    public void updateEmployee() {
+    public void addEmployee() {
+        Employee emp = createNewEmployee();
+        listEmployee.add(emp);
+    }
+
+    public void updateEmployee() {//cannot escape from update method yet
         System.out.println("Input employee id to update: ");
         String idEmpUpdate = inputEmployeeId();
         Employee empUpdate = searchEmployeeById(idEmpUpdate);
@@ -203,36 +207,47 @@ public class EmployeeService {
         System.out.println("9. Salary");
         System.out.println("10. Agency");
         System.out.println("0. Exit");
-        
+
         String choice = consoleInputService.getStringFromConsole();
         boolean exit = false;
         switch (choice) {
-            case "1": empUpdate.setId(inputEmployeeId());
+            case "1":
+                empUpdate.setId(inputEmployeeId());
                 break;
-            case "2": empUpdate.setFirstName(inputEmployeeFirstName());
+            case "2":
+                empUpdate.setFirstName(inputEmployeeFirstName());
                 break;
-            case "3": empUpdate.setLastName(inputEmployeeLastName());
+            case "3":
+                empUpdate.setLastName(inputEmployeeLastName());
                 break;
-            case "4": empUpdate.setPhone(inputPhoneNumber());
+            case "4":
+                empUpdate.setPhone(inputPhoneNumber());
                 break;
-            case "5": empUpdate.setEmail(inputEmail());
+            case "5":
+                empUpdate.setEmail(inputEmail());
                 break;
-            case "6": empUpdate.setAddress(inputAddress());
+            case "6":
+                empUpdate.setAddress(inputAddress());
                 break;
-            case "7": empUpdate.setDob(inputDOB());
+            case "7":
+                empUpdate.setDob(inputDOB());
                 break;
-            case "8": empUpdate.setSex(inputSex());
+            case "8":
+                empUpdate.setSex(inputSex());
                 break;
-            case "9": empUpdate.setSalary(inputSalary());
+            case "9":
+                empUpdate.setSalary(inputSalary());
                 break;
-            case "10": empUpdate.setAgency(inputAgency());
+            case "10":
+                empUpdate.setAgency(inputAgency());
                 break;
             case "0":
+                exit = true;
                 break;
             default:
                 System.out.println("Invalid selection!");
         }
-        if (!exit){
+        if (!exit) {
             updateEmployee();
         }
     }
@@ -251,7 +266,7 @@ public class EmployeeService {
         System.out.println("Employee was not found!");
     }
 
-    public Employee searchEmployeeById(String id) {
+    private Employee searchEmployeeById(String id) {
         for (Employee e : listEmployee) {
             if (e.getId().equals(id)) {
                 return e;
@@ -277,7 +292,22 @@ public class EmployeeService {
         return confirm();
     }
 
-    public List<Employee> serchEmployeeByName(String partOfName) {
+    public void searchEmployee() {
+        System.out.println("Name searching: ");
+        String partOfName = consoleInputService.getStringFromConsole();
+        List<Employee> listRs = searchEmployeeByName(partOfName);
+        if (listRs.isEmpty()) {
+            System.out.println("Not found!");
+            return;
+        } else {
+            System.out.println("Found " + listRs.size() + " employees.");
+            for (Employee l : listRs) {
+                System.out.println(l);
+            }
+        }
+    }
+
+    private List<Employee> searchEmployeeByName(String partOfName) {
         List<Employee> listEmpResult = new ArrayList<>();
         for (Employee e : listEmployee) {
             String fullName = e.getFirstName() + " " + e.getLastName();
@@ -296,12 +326,4 @@ public class EmployeeService {
             }
         });
     }
-
-    public void showAllEmployee() {
-        System.out.println("List of Employees: ");
-        for (Employee em : listEmployee) {
-            System.out.println(em);
-        }
-    }
-
 }
