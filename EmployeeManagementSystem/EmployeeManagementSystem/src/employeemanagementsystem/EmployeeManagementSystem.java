@@ -51,7 +51,7 @@ public class EmployeeManagementSystem {
             default:
                 System.out.println("Invalid selection!");
         }
-        if (!exit){
+        if (exit == false){
             menu();
         }
     }
