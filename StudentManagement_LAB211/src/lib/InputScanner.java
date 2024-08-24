@@ -16,7 +16,7 @@ public class InputScanner {
     public static String inputString(String mess) {
         String rs = "";
         Scanner sc = new Scanner(System.in);
-        System.out.println(mess);
+        System.out.print(mess);
         rs = sc.nextLine();
         return rs;
     }
@@ -25,6 +25,13 @@ public class InputScanner {
         int rs = 0;
         String temp = inputString(mess);
         rs = Integer.parseInt(temp);
+        return rs;
+    }
+    
+    public static boolean inputGender(String mess){
+        boolean rs = false;
+        int temp = inputInt(mess);
+        rs = temp==1;
         return rs;
     }
 }

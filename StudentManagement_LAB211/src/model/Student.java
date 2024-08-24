@@ -16,13 +16,13 @@ public class Student implements Serializable, Comparable<Student>{
     private String ID;
     private String fullName;
     private boolean gender;
-    private Date dob;
+    private String dob;
     private String phoneNumber;
 
     public Student() {
     }
 
-    public Student(String ID, String fullName, boolean gender, Date dob, String phoneNumber) {
+    public Student(String ID, String fullName, boolean gender, String dob, String phoneNumber) {
         this.ID = ID;
         this.fullName = fullName;
         this.gender = gender;
@@ -54,11 +54,11 @@ public class Student implements Serializable, Comparable<Student>{
         this.gender = gender;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
@@ -77,7 +77,7 @@ public class Student implements Serializable, Comparable<Student>{
 
     @Override
     public String toString() {
-        return String.format("| %-10s | %-25s | %-6s | %10s |", 
-                this.ID, this.fullName, (this.gender?"Male":"Female"), this.phoneNumber);
+        return String.format("| %-10s | %-25s | %-6s | %-13s | %-11s |", 
+                this.ID, this.fullName, (this.gender?"Male":"Female"),this.dob, this.phoneNumber);
     }
 }
