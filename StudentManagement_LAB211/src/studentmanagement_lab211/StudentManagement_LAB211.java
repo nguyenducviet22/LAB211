@@ -5,8 +5,7 @@
  */
 package studentmanagement_lab211;
 
-import java.util.Date;
-import java.util.Scanner;
+import lib.InputScanner;
 import model.BussStudent;
 import model.Student;
 
@@ -20,18 +19,15 @@ public class StudentManagement_LAB211 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BussStudent list = new BussStudent();
+        String pathFile = "./StudentData.dat";
+        BussStudent list = new BussStudent(pathFile);
         String choice;
         do {
             choice = menu();
             switch (choice) {
                 case "1":
-                    Student stuAn = new Student("SE123456", "Nguyen Van An", true, new Date(2004, 9, 2), "0123456789");
-                    list.addStudent(stuAn);
-                    Student stuBinh = new Student("SE123457", "Hoang Thai Binh", true, new Date(2004, 10, 12), "0987654321");
-                    list.addStudent(stuBinh);
-                    Student stuChi = new Student("SE123458", "Pham Thanh Chi", false, new Date(2004, 2, 2), "0246813579");
-                    list.addStudent(stuChi);
+                    Student student = createNewStudent();
+                    list.addStudent(student);
                     break;
                 case "2":
                     if (list.isEmpty()) {
@@ -42,14 +38,43 @@ public class StudentManagement_LAB211 {
                     }
                     break;
                 case "3":
-                    list.searchByID("SE123456");
+                    if (list.isEmpty()) {
+                        System.out.println("No student in the list!");
+                    } else {
+                        String searchID = InputScanner.inputString("Enter ID to search: ");
+                        if (list.searchByID(searchID) != null) {
+                        } else {
+                            System.out.println("Not found!");
+                        }
+                    }
                     break;
                 case "4":
-                    list.deleteByID("SE123456");
+                    if (list.isEmpty()) {
+                        System.out.println("No student in the list!");
+                    } else {
+                        String deleteID = InputScanner.inputString("Enter ID to delete: ");
+                        if (list.deleteByID(deleteID)) {
+                            System.out.println("Deleted!");
+                        } else {
+                            System.out.println("ID does not exist!");
+                        }
+                    }
                     break;
                 case "5":
                     System.out.println("Sorted By Name List: ");
                     list.sortByName();
+                    break;
+                case "6":
+                    list.readFromFile();
+                    if (list.isEmpty()){
+                        System.out.println("File is empty!");
+                    } else {
+                        list.displayAll();
+                    }
+                    break;
+                case "7":
+                    list.writeToFile();
+                    System.out.println("Write to file successfully!");
                     break;
                 case "0":
                     System.out.println("Bye bye!!!");
@@ -67,9 +92,22 @@ public class StudentManagement_LAB211 {
                 + "3. Search\n"
                 + "4. Delete\n"
                 + "5. Sort By Full Name\n"
+                + "6. Read from file\n"
+                + "7. Write to file\n"
                 + "0. Exit\n"
-                + "Enter your choice!";
-        String rs = lib.InputScanner.inputString(mess);
+                + "Enter your choice: ";
+        String rs = InputScanner.inputString(mess);
         return rs;
+    }
+
+    private static Student createNewStudent() {
+        Student s = new Student();
+        System.out.println("Enter student info: ");
+        s.setID(InputScanner.inputString("Student ID: "));
+        s.setFullName(InputScanner.inputString("Full Name: "));
+        s.setGender(InputScanner.inputGender("Gender (1: Male - 2: Female): "));
+        s.setDob(InputScanner.inputString("Date of Birth: "));
+        s.setPhoneNumber(InputScanner.inputString("Phone Number: "));
+        return s;
     }
 }
