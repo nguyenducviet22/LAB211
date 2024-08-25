@@ -24,7 +24,7 @@ public class ConsoleInputService {
     private final String EMPLOYEE_NAME_FORMAT = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
     private final String PHONE_FORMAT = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$";
     private final String EMAIL_FORMAT = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    private final String ADDRESS_FORMAT = "^[#.0-9a-zA-Z\\s,-]+$";
+    private final String ADDRESS_FORMAT = "^[ #.0-9a-zA-Z\\s,-]+$";
 
     private ConsoleInputService() {
         sc = new Scanner(System.in);

@@ -5,7 +5,7 @@
  */
 package studentmanagement_lab211;
 
-import lib.InputScanner;
+import lib.InputValidation;
 import model.BussStudent;
 import model.Student;
 
@@ -19,7 +19,7 @@ public class StudentManagement_LAB211 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String pathFile = "./StudentData.dat";
+        String pathFile = "./StudentData.txt";
         BussStudent list = new BussStudent(pathFile);
         String choice;
         do {
@@ -41,7 +41,7 @@ public class StudentManagement_LAB211 {
                     if (list.isEmpty()) {
                         System.out.println("No student in the list!");
                     } else {
-                        String searchID = InputScanner.inputString("Enter ID to search: ");
+                        String searchID = InputValidation.inputString("Enter ID to search: ");
                         if (list.searchByID(searchID) != null) {
                         } else {
                             System.out.println("Not found!");
@@ -52,7 +52,7 @@ public class StudentManagement_LAB211 {
                     if (list.isEmpty()) {
                         System.out.println("No student in the list!");
                     } else {
-                        String deleteID = InputScanner.inputString("Enter ID to delete: ");
+                        String deleteID = InputValidation.inputString("Enter ID to delete: ");
                         if (list.deleteByID(deleteID)) {
                             System.out.println("Deleted!");
                         } else {
@@ -66,7 +66,7 @@ public class StudentManagement_LAB211 {
                     break;
                 case "6":
                     list.readFromFile();
-                    if (list.isEmpty()){
+                    if (list.isEmpty()) {
                         System.out.println("File is empty!");
                     } else {
                         list.displayAll();
@@ -96,18 +96,22 @@ public class StudentManagement_LAB211 {
                 + "7. Write to file\n"
                 + "0. Exit\n"
                 + "Enter your choice: ";
-        String rs = InputScanner.inputString(mess);
+        String rs = InputValidation.inputString(mess);
         return rs;
     }
 
     private static Student createNewStudent() {
         Student s = new Student();
         System.out.println("Enter student info: ");
-        s.setID(InputScanner.inputString("Student ID: "));
-        s.setFullName(InputScanner.inputString("Full Name: "));
-        s.setGender(InputScanner.inputGender("Gender (1: Male - 2: Female): "));
-        s.setDob(InputScanner.inputString("Date of Birth: "));
-        s.setPhoneNumber(InputScanner.inputString("Phone Number: "));
+        try {
+            s.setID(InputValidation.inputString("Student ID: "));
+            s.setFullName(InputValidation.inputString("Full Name: "));
+            s.setGender(InputValidation.inputGender("Gender (1: Male - 2: Female): "));
+            s.setDob(InputValidation.inputString("Date of Birth: "));
+            s.setPhoneNumber(InputValidation.inputString("Phone Number: "));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return s;
     }
 }

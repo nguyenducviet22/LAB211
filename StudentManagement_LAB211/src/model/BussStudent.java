@@ -124,6 +124,5 @@ public class BussStudent {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(BussStudent.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 }
