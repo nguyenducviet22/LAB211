@@ -5,7 +5,7 @@
  */
 package studentmanagement_lab211;
 
-import lib.InputValidation;
+import util.InputValidation;
 import model.BussStudent;
 import model.Student;
 
