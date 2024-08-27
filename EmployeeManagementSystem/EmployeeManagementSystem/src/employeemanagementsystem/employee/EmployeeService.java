@@ -27,11 +27,13 @@ public class EmployeeService {
 //    private static EmployeeService instance;
     private List<Employee> listEmployee;
     private ConsoleInputService consoleInputService;
+    private Inputtor input;
     private String pathFile;
 
     public EmployeeService(String fileName) {
         listEmployee = new ArrayList<>();
         consoleInputService = ConsoleInputService.getInstance();
+        input = new Inputtor();
         pathFile = fileName;
     }
 
@@ -41,152 +43,40 @@ public class EmployeeService {
 //        }
 //        return instance;
 //    }
-    
     public boolean isEmpty() {
         return this.listEmployee.size() == 0;
     }
     
+    public void createSampleData(){
+        listEmployee.add(new Employee("EM01", "An", "Nguyen", "0123456789", "na@gmail.com", "tp hcm", "10-10-2000", "Male", 1234, "IT"));
+        listEmployee.add(new Employee("EM02", "Binh", "Nguyen", "0123456789", "na@gmail.com", "tp hcm", "10-10-2000", "Male", 1247, "SALE"));
+        listEmployee.add(new Employee("EM03", "Chi", "Nguyen", "0123456789", "na@gmail.com", "tp hcm", "10-10-2000", "Female", 1236, "IT"));
+        listEmployee.add(new Employee("EM04", "Duong", "Nguyen", "0123456789", "na@gmail.com", "tp hcm", "10-10-2000", "Female", 1224, "MKT"));
+        listEmployee.add(new Employee("EM05", "Duc", "Nguyen", "0123456789", "na@gmail.com", "tp hcm", "10-10-2000", "Male", 1250, "ADS"));
+    }
+
     private Employee createNewEmployee() {
         Employee newEm = new Employee();
-        String idInput;
-        while (true) {
-            idInput = inputEmployeeId();
-            if (!isDuplicateId(idInput)) {
-                break;
-            }
-            System.out.print("ID has existed! Enter another ");
-        }
-
-        newEm.setId(idInput);
-        newEm.setFirstName(inputEmployeeFirstName());
-        newEm.setLastName(inputEmployeeLastName());
-        newEm.setPhone(inputPhoneNumber());
-        newEm.setEmail(inputEmail());
-        newEm.setAddress(inputAddress());
-        newEm.setDob(inputDOB());
-        newEm.setSex(inputSex());
-        newEm.setSalary(inputSalary());
-        newEm.setAgency(inputAgency());
+//        String idInput;
+//        while (true) {
+//            idInput = input.getEmployeeIdFromConsole();
+//            if (!isDuplicateId(idInput)) {
+//                break;
+//            }
+//            System.out.print("ID has existed! Enter another ");
+//        }
+//        newEm.setId(idInput);
+        newEm.setId(input.getEmployeeIdFromConsole());
+        newEm.setFirstName(input.getEmployeeFirstNameFromConsole());
+        newEm.setLastName(input.getEmployeeLastNameFromConsole());
+        newEm.setPhone(input.getPhoneNumberFromConsole());
+        newEm.setEmail(input.getEmailFromConsole());
+        newEm.setAddress(input.getAddressFromConsole());
+        newEm.setDob(input.getDOBFromConsole());
+        newEm.setSex(input.getSexFromConsole());
+        newEm.setSalary(input.getSalaryFromConsole());
+        newEm.setAgency(input.getAgencyFromConsole());
         return newEm;
-    }
-
-    private String inputEmployeeId() {
-        System.out.print("ID: ");
-        String idInput = consoleInputService.getStringFromConsole();//let users input value
-        if (consoleInputService.isValidEmployeeIdFormat(idInput)) {
-            return idInput;//valid input
-        }
-        System.out.print("Inlavid ID, enter again: ");
-        return inputEmployeeId();//invalid input, re-input
-    }
-
-    private boolean isDuplicateId(String id) {
-        for (Employee e : listEmployee) {
-            if (e.getId().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String inputEmployeeFirstName() {
-        System.out.print("First Name: ");
-        String fNameInput = consoleInputService.getStringFromConsole().trim();
-        if (consoleInputService.isValidEmployeeNameFormat(fNameInput)) {
-            return fNameInput;
-        }
-        System.out.print("Inlavid First Name, enter again: ");
-        return inputEmployeeFirstName();
-    }
-
-    private String inputEmployeeLastName() {
-        System.out.print("Last Name: ");
-        String lNameInput = consoleInputService.getStringFromConsole().trim();
-        if (consoleInputService.isValidEmployeeNameFormat(lNameInput)) {
-            return lNameInput;
-        }
-        System.out.print("Inlavid Last Name, enter again: ");
-        return inputEmployeeLastName();
-    }
-
-    private String inputPhoneNumber() {
-        System.out.print("Phone Number: ");
-        String phoneNumInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidPhoneNumberFormat(phoneNumInput)) {
-            return phoneNumInput;
-        }
-        System.out.print("Inlavid Phone Number, enter again: ");
-        return inputPhoneNumber();
-    }
-
-    private String inputEmail() {
-        System.out.print("Email: ");
-        String emailInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidEmailFormat(emailInput)) {
-            return emailInput;
-        }
-        System.out.print("Inlavid Email, enter again: ");
-        return inputEmail();
-    }
-
-    private String inputAddress() {
-        System.out.print("Address: ");
-        String addressInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidAddressFormat(addressInput)) {
-            return addressInput;
-        }
-        System.out.print("Inlavid Address, enter again: ");
-        return inputAddress();
-    }
-
-    private String inputDOB() {
-        System.out.print("Date of birth: ");
-        String dobInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidDate(Employee.DATE_OF_BIRTH, dobInput)) {
-            return dobInput;
-        }
-        System.out.print("Inlavid Date of birth, enter again: ");
-        return inputDOB();
-    }
-
-    private String inputSex() {
-        System.out.println("Sex (Gender): ");
-        System.out.println("1. Male");
-        System.out.println("2. Female");
-        System.out.println("3. Other");
-
-        String choice = consoleInputService.getStringFromConsole();
-        switch (choice) {
-            case "1":
-                return "Male";
-            case "2":
-                return "Female";
-            case "3":
-                return "Other";
-            default:
-                System.out.println("Invalid selection!");
-        }
-        return inputSex();
-    }
-
-    private double inputSalary() {
-        System.out.print("Salary: ");
-        String salaryInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidSalary(salaryInput)) {
-            return Double.parseDouble(salaryInput);
-        }
-        System.out.print("Inlavid Salary, enter again: ");
-        return inputSalary();
-    }
-
-    private String inputAgency() {
-        System.out.print("Agency: ");
-        String agencyInput = consoleInputService.getStringFromConsole();
-        if (consoleInputService.isValidAgencyFormat(agencyInput)) {
-            return agencyInput;
-        }
-        System.out.print("Inlavid Agency, enter again: ");
-        return inputAgency();
     }
 
     public void showAllEmployee() {
@@ -207,7 +97,7 @@ public class EmployeeService {
 
     public void updateEmployee() {//cannot escape from update method yet
         System.out.println("Input employee id to update: ");
-        String idEmpUpdate = inputEmployeeId();
+        String idEmpUpdate = input.getEmployeeIdFromConsole();
         Employee empUpdate = searchEmployeeById(idEmpUpdate);
         if (empUpdate == null) {
             System.out.println("Employee was not found! ");
@@ -233,34 +123,34 @@ public class EmployeeService {
         boolean exit = true;
         switch (choice) {
             case "1":
-                empUpdate.setId(inputEmployeeId());
+                empUpdate.setId(input.getEmployeeIdFromConsole());
                 break;
             case "2":
-                empUpdate.setFirstName(inputEmployeeFirstName());
+                empUpdate.setFirstName(input.getEmployeeFirstNameFromConsole());
                 break;
             case "3":
-                empUpdate.setLastName(inputEmployeeLastName());
+                empUpdate.setLastName(input.getEmployeeLastNameFromConsole());
                 break;
             case "4":
-                empUpdate.setPhone(inputPhoneNumber());
+                empUpdate.setPhone(input.getPhoneNumberFromConsole());
                 break;
             case "5":
-                empUpdate.setEmail(inputEmail());
+                empUpdate.setEmail(input.getEmailFromConsole());
                 break;
             case "6":
-                empUpdate.setAddress(inputAddress());
+                empUpdate.setAddress(input.getAddressFromConsole());
                 break;
             case "7":
-                empUpdate.setDob(inputDOB());
+                empUpdate.setDob(input.getDOBFromConsole());
                 break;
             case "8":
-                empUpdate.setSex(inputSex());
+                empUpdate.setSex(input.getSexFromConsole());
                 break;
             case "9":
-                empUpdate.setSalary(inputSalary());
+                empUpdate.setSalary(input.getSalaryFromConsole());
                 break;
             case "10":
-                empUpdate.setAgency(inputAgency());
+                empUpdate.setAgency(input.getAgencyFromConsole());
                 break;
             case "0":
                 break;
@@ -280,15 +170,15 @@ public class EmployeeService {
 
     public void removeEmployee() {
         System.out.println("Input employee id to remove: ");
-        String idEmpRemove = inputEmployeeId();
+        String idEmpRemove = input.getEmployeeIdFromConsole();
         Employee empRemove = searchEmployeeById(idEmpRemove);
-        
+
         if (empRemove != null) {
             System.out.println(empRemove);
             if (confirm()) {
                 listEmployee.remove(empRemove);
             }
-        } else{
+        } else {
             System.out.println("Employee was not found!");
         }
     }
@@ -357,7 +247,7 @@ public class EmployeeService {
         System.out.println("Salary sorted employee list: ");
         showAllEmployee();
     }
-    
+
     public boolean writeToFile() {
         boolean status = false;
         try {
