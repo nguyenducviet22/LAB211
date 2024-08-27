@@ -23,6 +23,7 @@ public class EmployeeManagementSystem {
         employeeService = new EmployeeService(pathFile);
         consoleInputService = ConsoleInputService.getInstance();
         
+        employeeService.createSampleData();
         menu();
     }
 
@@ -31,7 +32,7 @@ public class EmployeeManagementSystem {
         boolean exit = false;
         switch (consoleInputService.getStringFromConsole()) {
             case "1":
-                employeeService.readFromFile();
+//                employeeService.readFromFile();
                 if (employeeService.isEmpty()) {
                     System.out.println("No student in the list!");
                 } else {
@@ -41,10 +42,10 @@ public class EmployeeManagementSystem {
                 break;
             case "2":
                 employeeService.addEmployee();
-                employeeService.writeToFile();
+//                employeeService.writeToFile();
                 break;
             case "3":
-                employeeService.updateEmployee();
+                employeeService.updateEmployee();//need to sort by ID
                 break;
             case "4":
                 employeeService.removeEmployee();
