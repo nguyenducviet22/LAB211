@@ -1,0 +1,11 @@
+Model: Class Obj. Eg: Product, Brand, Category
+Repository: 
+	RepoPro, RepoBra, RepoCate (HashMap)
+	CRUD: ICRUD
+Business: Validate (Self-done)
+	BusPro, BusBra, BusCate
+GUI: Menu
+
+Gui -> Buss -> Repo -> Model
+
+Slot 6: Review J1.24
