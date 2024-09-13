@@ -79,7 +79,8 @@ public class Product {
 
     @Override
     public String toString() {
-        return super.toString(); //To change body of generated methods, choose Tools | Templates.
+        return String.format("|%-5s|%-14s|%-10s|%-13s|%-7s|%.2f |", 
+                id, name, getBrand_id(), getCategory_id(), model_year, list_price);
     }
     
     

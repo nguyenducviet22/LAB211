@@ -116,7 +116,7 @@ public class CategoryRepository extends HashMap<String, Category> implements ICr
             PrintWriter pw = new PrintWriter(fw);
 
             for (Map.Entry<String, Category> entry : this.entrySet()) {
-                System.out.println();
+//                System.out.println();
                 Category item = entry.getValue();
                 pw.println(item.getId() + "," + item.getName());
             }

@@ -116,7 +116,7 @@ public class BrandRepository extends HashMap<String, Brand> implements ICrud<Str
             PrintWriter pw = new PrintWriter(fw);
 
             for (Map.Entry<String, Brand> entry : this.entrySet()) {
-                System.out.println();
+//                System.out.println();
                 Brand item = entry.getValue();
                 pw.println(item.getId() + "," + item.getName() + "," + item.getCountry());
             }

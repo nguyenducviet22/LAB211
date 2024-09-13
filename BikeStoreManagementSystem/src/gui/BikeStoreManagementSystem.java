@@ -18,39 +18,41 @@ public class BikeStoreManagementSystem {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        BrandBusiness brandBus = new BrandBusiness();
+        BrandMenu bm = new BrandMenu();
+        CategoryMenu cm = new CategoryMenu();
+        ProductMenu pm = new ProductMenu();
         Scanner sc = new Scanner(System.in);
-        int choice;
-
-        Menu brandMenu = new Menu();
-        brandMenu.add("1. Print brand list");
-        brandMenu.add("2. Adding new brand");
-        brandMenu.add("0. Exit program");
-
-        do {
-            brandMenu.displayMenu();
+        
+        Menu m = new Menu();
+        m.add("1. Product");
+        m.add("2. Brand");
+        m.add("3. Category");
+        m.add("0. Exit!");
+        String choice;
+        
+        do {            
+            m.displayMenu();
             System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
+            choice = sc.nextLine();
+            
             switch (choice) {
-                case 1:
-                    System.out.println("-----------------------------------");
-                    System.out.println("| ID | Brand Name | Country       |");
-                    System.out.println("-----------------------------------");
-                    brandBus.showBrandList();
+                case "1":
+                    pm.createProMenu();
                     break;
-
-                case 2:
-                    brandBus.createNewBrand();
+                case "2":
+                    bm.createBrandMenu();
                     break;
-
-                case 0:
-                    System.out.println("Bye bye!");
+                case "3":
+                    cm.createCateMenu();
                     break;
-                    
+                case "0":
+                    System.out.println("Bye bye");
+                    break;
                 default:
                     System.out.println("Invalid selection!");
             }
-        } while (choice < brandMenu.size() && choice > 0);
+        } while (!choice.equals("0"));
+
     }
 
 }

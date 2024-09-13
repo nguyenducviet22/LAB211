@@ -6,6 +6,7 @@
 package business;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,6 +21,7 @@ public class BrandBusiness {
 
     private BrandRepository brandRepo;
     Scanner sc = new Scanner(System.in);
+    Random rd = new Random();
     private String brandIdRegex = "B\\d{3}";
     private String brandNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
     private String brandCountryRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
@@ -89,13 +91,29 @@ public class BrandBusiness {
         return getBrandCountryFromConsole();
     }
 
+    public boolean isExistedId(String id) {
+        for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
+            if (entry.getValue().getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void createNewBrand() {
-        String id = getBrandIdFromConsole();
+        String id;
+        while (true) {
+            id = "B" + (rd.nextInt(900) + 100);
+            if (!isExistedId(id)) {
+                break;
+            }
+        }
         String name = getBrandNameFromConsole();
         String country = getBrandCountryFromConsole();
 
         Brand b = new Brand(id, name, country);
         brandRepo.create(b);
+        brandRepo.writeDataToFile("Brand.txt");
     }
 
     public void showBrandList() {

@@ -120,7 +120,7 @@ public class ProductRepository extends HashMap<String, Product> implements ICrud
             PrintWriter pw = new PrintWriter(fw);
 
             for (Map.Entry<String, Product> entry : this.entrySet()) {
-                System.out.println();
+//                System.out.println();
                 Product item = entry.getValue();
                 pw.println(item.getId() + "," + item.getName() + "," + item.getBrand_id() + "," + item.getCategory_id() + "," + item.getModel_year() + "," + item.getList_price());
             }
