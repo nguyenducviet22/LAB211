@@ -5,6 +5,7 @@
 package business;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ import repository.CategoryRepository;
 public class CategoryBusiness {
     private CategoryRepository cateRepo;
     Scanner sc = new Scanner(System.in);
+    Random rd = new Random();
     private String cateIdRegex = "C\\d{3}";
     private String cateNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
 
@@ -53,31 +55,47 @@ public class CategoryBusiness {
     }
     
     public String getCateIdFromConsole() {
-        System.out.print("Enter Brand ID: ");
+        System.out.print("Enter Category ID: ");
         String id = sc.nextLine();
         if (isValidCateIdFormat(id)) {
             return id;
         }
-        System.out.println("Invalid Brand ID! Try again!");
+        System.out.println("Invalid Category ID! Try again!");
         return getCateIdFromConsole();
     }
 
     public String getCateNameFromConsole() {
-        System.out.print("Enter Brand Name: ");
+        System.out.print("Enter Category Name: ");
         String name = sc.nextLine();
         if (isValidCateNameFormat(name)) {
             return name;
         }
-        System.out.println("Invalid Brand Name! Try again!");
+        System.out.println("Invalid Category Name! Try again!");
         return getCateNameFromConsole();
     }
     
+    public boolean isExistedId(String id) {
+        for (Map.Entry<String, Category> entry : cateRepo.entrySet()) {
+            if (entry.getValue().getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void createNewCate(){
-        String id = getCateIdFromConsole();
+        String id;
+        while (true) {
+            id = "C" + (rd.nextInt(900) + 100);;
+            if (!isExistedId(id)) {
+                break;
+            }
+        }
         String name = getCateNameFromConsole();
         
         Category c = new Category(id, name);
         cateRepo.create(c);
+        cateRepo.writeDataToFile("Category.txt");
     }
     
     public void showBrandList() {
