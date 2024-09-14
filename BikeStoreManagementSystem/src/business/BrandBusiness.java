@@ -117,9 +117,26 @@ public class BrandBusiness {
     }
 
     public void showBrandList() {
-        for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
-            System.out.println(entry.getValue());
+        if (brandRepo.entrySet().isEmpty()) {
+            System.out.println("Brand file is empty!");
+            System.out.println("");
+        } else {
+            showHeadTable();
+            for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
+                System.out.println(entry.getValue());
+            }
+            showFootTable();
         }
+    }
+
+    public void showHeadTable() {
+        System.out.println("---------------------------------------");
+        System.out.println("| ID   | Brand Name  | Country        |");
+        System.out.println("---------------------------------------");
+    }
+
+    public void showFootTable() {
+        System.out.println("---------------------------------------");
     }
 
 }

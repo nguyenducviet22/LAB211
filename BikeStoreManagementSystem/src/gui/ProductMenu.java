@@ -19,8 +19,12 @@ public class ProductMenu {
         Scanner sc = new Scanner(System.in);
         String choice;
         Menu m = new Menu();
-        m.add("1. Print product list");
-        m.add("2. Adding new product");
+        m.add("1. Add new product");
+        m.add("2. Search product by product name");
+        m.add("3. Update product");
+        m.add("4. Delete product");
+        m.add("5. Sort product ascending");
+        m.add("6. Print list products from the file");
         m.add("0. Back to main menu");
 
         do {
@@ -30,13 +34,22 @@ public class ProductMenu {
 
             switch (choice) {
                 case "1":
-                    System.out.println("--------------------------------------------------------------");
-                    System.out.println("| ID  | Product Name | Brand ID | Category ID | Model | Price |");
-                    System.out.println("--------------------------------------------------------------");
-                    proBus.showProductList();
+                    proBus.createNewProduct();
                     break;
                 case "2":
-                    proBus.createNewProduct();
+                    proBus.searchProByName();
+                    break;
+                case "3":
+                    proBus.updateProduct();
+                    break;
+                case "4":
+                    proBus.deleteProduct();
+                    break;
+                case "5":
+                    proBus.sortProduct();
+                    break;
+                case "6":
+                    proBus.showProductList();
                     break;
                 case "0":
                     break;

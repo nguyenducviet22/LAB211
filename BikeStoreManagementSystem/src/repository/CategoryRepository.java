@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import model.Brand;
 import model.Category;
 
 /**
@@ -88,7 +87,7 @@ public class CategoryRepository extends HashMap<String, Category> implements ICr
 
                 // Tái tạo Java Object
                 Category _br = new Category(_id, _name);
-
+                
                 // Đưa object vào Repository
                 this.create(_br);
             }

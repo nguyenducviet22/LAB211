@@ -21,7 +21,7 @@ public class CategoryMenu {
 
         Menu m = new Menu();
         m.add("1. Print category list");
-        m.add("2. Adding new category");
+        m.add("2. Add new category");
         m.add("0. Back to main menu");
 
         do {
@@ -31,10 +31,7 @@ public class CategoryMenu {
 
             switch (choice) {
                 case "1":
-                    System.out.println("----------------------");
-                    System.out.println("| ID  | Category Name |");
-                    System.out.println("----------------------");
-                    cateBus.showBrandList();
+                    cateBus.showCateList();
                     break;
                 case "2":
                     cateBus.createNewCate();
