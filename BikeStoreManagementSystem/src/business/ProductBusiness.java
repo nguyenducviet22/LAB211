@@ -4,6 +4,7 @@
  */
 package business;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
@@ -24,9 +25,9 @@ public class ProductBusiness {
     Scanner sc = new Scanner(System.in);
     Random rd = new Random();
     private String proIdRegex = "P\\d{3}";
-    private String proNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
+    private String proNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*(\\s\\d+)*";
     private String proModelYearRegex = "\\d{4}";
-    private String proListPriceRegex = "\\d+(\\.\\d{1,2})?";
+    private String proListPriceRegex = "^\\d+(\\.\\d+)?$";
 
     public ProductBusiness() {
         proRepo = new ProductRepository();
@@ -108,15 +109,15 @@ public class ProductBusiness {
         String price = sc.nextLine();
         double p = 0;
         if (isValidProListPriceFormat(price)) {
-            p = Double.parseDouble(price); 
+            p = Double.parseDouble(price);
         }
-        if (p > 0){
+        if (p > 0) {
             return p;
         }
         System.out.println("Invalid Product Price! Try again!");
         return getProListPriceFromConsole();
     }
-    
+
     public boolean isExistedId(String id) {
         for (Map.Entry<String, Product> entry : proRepo.entrySet()) {
             if (entry.getValue().getId().equals(id)) {
@@ -134,7 +135,7 @@ public class ProductBusiness {
                 break;
             }
         }
-        String name = getProNameFromConsole();        
+        String name = getProNameFromConsole();
         String brandId;
         while (true) {
             brandId = brandBus.getBrandIdFromConsole();
@@ -158,9 +159,178 @@ public class ProductBusiness {
         proRepo.writeDataToFile("Product.txt");
     }
 
+    public void searchProByName() {
+        System.out.print("Enter name to search: ");
+        String name = sc.nextLine();
+        HashMap<String, Product> hm = new HashMap();
+        for (Map.Entry<String, Product> entry : proRepo.entrySet()) {
+            if (entry.getValue().getName().contains(name)) {
+                hm.put(entry.getKey(), entry.getValue());
+            }
+        }
+        showHeadTable();
+        for (Map.Entry<String, Product> entry : hm.entrySet()) {
+            System.out.println(entry.getValue());
+        }
+        showFootTable();
+    }
+
+    public void updateProduct() {
+        Product p;
+        String proID;
+        while (true) {
+            System.out.print("Enter product id to update: ");
+            proID = sc.nextLine();
+            if (isExistedId(proID)) {
+                p = proRepo.details(proID);
+                break;
+            }
+            System.out.println("Product ID does not exist!");
+        }
+        showHeadTable();
+        System.out.println(p);
+        showFootTable();
+        proRepo.delete(proID);
+        createNewProduct();
+        System.out.println("Update successfullly!");
+    }
+
+    public void deleteProduct() {
+        Product p;
+        String proID;
+        while (true) {
+            System.out.print("Enter product is to delete: ");
+            proID = sc.nextLine();
+            if (isExistedId(proID)) {
+                showHeadTable();
+                System.out.println(proRepo.details(proID));
+                showFootTable();
+                if (confirm()) {
+                    proRepo.delete(proID);
+                    proRepo.writeDataToFile("Product.txt");
+                    System.out.println("Delete successfully!");
+                }
+                break;
+            } else {
+                System.out.println("Product ID does not exist!");
+            }
+        }
+    }
+
+    public boolean confirm() {
+        System.out.println("Confirm to delete this product: ");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+
+        String choice = sc.nextLine();
+        switch (choice) {
+            case "1":
+                return true;
+            case "2":
+                System.out.println("Deletion has been cancaled!");
+                return false;
+            default:
+                System.out.println("Invalid selection!");
+        }
+        return confirm();
+    }
+
+    public void sortProduct() {
+        System.out.println("1. Sort by ID");
+        System.out.println("2. Sort by Name");
+        System.out.println("3. Sort by Model Year");
+        System.out.println("4. Sort by Price");
+        System.out.println("0. Back to product menu");
+        System.out.print("Choose kinds of sorting: ");
+
+        String choice = sc.nextLine();
+        switch (choice) {
+            case "1":
+                sortByID();
+                break;
+            case "2":
+                sortByName();
+                break;
+            case "3":
+                sortByYear();
+                break;
+            case "4":
+                sortByPrice();
+                break;
+            case "0":
+                break;
+            default:
+                System.out.println("Invalid selection");
+        }
+    }
+
+    public void sortByID() {
+        for (Map.Entry<String, Product> ei : proRepo.entrySet()) {
+            for (Map.Entry<String, Product> ej : proRepo.entrySet()) {
+                if (ei.getValue().getId().compareTo(ej.getValue().getId()) < 0){
+                    Product temp = ei.getValue();
+                    ei.setValue(ej.getValue());
+                    ej.setValue(temp);
+                }
+            }
+        }
+        showProductList();
+    }
+
+    public void sortByName() {
+        for (Map.Entry<String, Product> ei : proRepo.entrySet()) {
+            for (Map.Entry<String, Product> ej : proRepo.entrySet()) {
+                if (ei.getValue().getName().compareTo(ej.getValue().getName()) < 0){
+                    Product temp = ei.getValue();
+                    ei.setValue(ej.getValue());
+                    ej.setValue(temp);
+                }
+            }
+        }
+        showProductList();
+    }
+
+    public void sortByYear() {
+        for (Map.Entry<String, Product> ei : proRepo.entrySet()) {
+            for (Map.Entry<String, Product> ej : proRepo.entrySet()) {
+                if (ei.getValue().getModel_year()> (ej.getValue().getModel_year())){
+                    Product temp = ei.getValue();
+                    ei.setValue(ej.getValue());
+                    ej.setValue(temp);
+                }
+            }
+        }
+        showProductList();
+    }
+
+    public void sortByPrice() {
+        for (Map.Entry<String, Product> ei : proRepo.entrySet()) {
+            for (Map.Entry<String, Product> ej : proRepo.entrySet()) {
+                if (ei.getValue().getList_price()> (ej.getValue().getList_price())){
+                    Product temp = ei.getValue();
+                    ei.setValue(ej.getValue());
+                    ej.setValue(temp);
+                }
+            }
+        }
+        showProductList();
+    }
+
     public void showProductList() {
+        showHeadTable();
         for (Map.Entry<String, Product> entry : proRepo.entrySet()) {
             System.out.println(entry.getValue());
         }
+        showFootTable();
+    }
+
+    public void showHeadTable() {
+        System.out.println("--------------------------------------------------------------------------------------");
+        System.out.println("| ID   | Product Name             | Brand ID  | Category ID  | Model  | Price (USD)  |");
+        System.out.println("--------------------------------------------------------------------------------------");
+    }
+
+    public void showFootTable() {
+        System.out.println("--------------------------------------------------------------------------------------");
     }
 }

@@ -1,4 +1,3 @@
-C401,Lfadsa
-C004,Ssdfs Bike
-C543,Kjfa
-C378,Kjadsa
+C222,Road Bike
+C460,Electric Bike
+C454,Mountain Bike

@@ -13,14 +13,13 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import model.Brand;
 import model.Product;
 
 /**
  *
  * @author NGUYEN DUC VIET
  */
-public class ProductRepository extends HashMap<String, Product> implements ICrud<String, Product> {
+    public class ProductRepository extends HashMap<String, Product> implements ICrud<String, Product> {
 
     @Override
     public int create(Product newItem) {

@@ -17,6 +17,7 @@ import repository.CategoryRepository;
  * @author ADMIN
  */
 public class CategoryBusiness {
+
     private CategoryRepository cateRepo;
     Scanner sc = new Scanner(System.in);
     Random rd = new Random();
@@ -39,7 +40,7 @@ public class CategoryBusiness {
     public void setCateRepo(CategoryRepository cateRepo) {
         this.cateRepo = cateRepo;
     }
-    
+
     public boolean checkStringWithPattern(String regexPattern, String value) {
         Pattern pattern = Pattern.compile(regexPattern);
         Matcher matcher = pattern.matcher(value);
@@ -53,7 +54,7 @@ public class CategoryBusiness {
     public boolean isValidCateNameFormat(String value) {
         return checkStringWithPattern(cateNameRegex, value);
     }
-    
+
     public String getCateIdFromConsole() {
         System.out.print("Enter Category ID: ");
         String id = sc.nextLine();
@@ -73,7 +74,7 @@ public class CategoryBusiness {
         System.out.println("Invalid Category Name! Try again!");
         return getCateNameFromConsole();
     }
-    
+
     public boolean isExistedId(String id) {
         for (Map.Entry<String, Category> entry : cateRepo.entrySet()) {
             if (entry.getValue().getId().equals(id)) {
@@ -82,8 +83,8 @@ public class CategoryBusiness {
         }
         return false;
     }
-    
-    public void createNewCate(){
+
+    public void createNewCate() {
         String id;
         while (true) {
             id = "C" + (rd.nextInt(900) + 100);;
@@ -92,16 +93,33 @@ public class CategoryBusiness {
             }
         }
         String name = getCateNameFromConsole();
-        
+
         Category c = new Category(id, name);
         cateRepo.create(c);
         cateRepo.writeDataToFile("Category.txt");
     }
-    
-    public void showBrandList() {
-        for (Map.Entry<String, Category> entry : cateRepo.entrySet()) {
-            System.out.println(entry.getValue());
+
+    public void showCateList() {
+        if (cateRepo.entrySet().isEmpty()) {
+            System.out.println("Category list is empty!");
+            System.out.println("");
+        } else {
+            showHeadTable();
+            for (Map.Entry<String, Category> entry : cateRepo.entrySet()) {
+                System.out.println(entry.getValue());
+            }
+            showFootTable();
         }
     }
-    
+
+    public void showHeadTable() {
+        System.out.println("-------------------------");
+        System.out.println("| ID   | Category Name  |");
+        System.out.println("-------------------------");
+    }
+
+    public void showFootTable() {
+        System.out.println("-------------------------");
+    }
+
 }

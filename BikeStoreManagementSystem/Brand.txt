@@ -1,4 +1,3 @@
-B163,Ksadf,Blkdf
-B899,Kfsd,Mlkds
-B126,Klsd,Oofdfa
-B255,Sadfa,Kfsdf
+B263,Specialized,United States
+B743,Giant,Taiwan
+B634,Trek,United States

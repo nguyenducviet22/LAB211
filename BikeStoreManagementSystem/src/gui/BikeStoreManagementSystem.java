@@ -46,7 +46,7 @@ public class BikeStoreManagementSystem {
                     cm.createCateMenu();
                     break;
                 case "0":
-                    System.out.println("Bye bye");
+                    System.out.println("Bye bye!");
                     break;
                 default:
                     System.out.println("Invalid selection!");

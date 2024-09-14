@@ -50,6 +50,6 @@ public class Brand {
 
     @Override
     public String toString() {
-        return String.format("|%-5s|%-12s|%-15s|", id, name, country);
+        return String.format("| %-5s| %-12s| %-15s|", id, name, country);
     }
 }

@@ -21,7 +21,7 @@ public class BrandMenu {
 
         Menu brandMenu = new Menu();
         brandMenu.add("1. Print brand list");
-        brandMenu.add("2. Adding new brand");
+        brandMenu.add("2. Add new brand");
         brandMenu.add("0. Back to main menu");
 
         do {
@@ -30,9 +30,6 @@ public class BrandMenu {
             choice = sc.nextLine();
             switch (choice) {
                 case "1":
-                    System.out.println("-----------------------------------");
-                    System.out.println("| ID  | Brand Name | Country       |");
-                    System.out.println("-----------------------------------");
                     brandBus.showBrandList();
                     break;
 

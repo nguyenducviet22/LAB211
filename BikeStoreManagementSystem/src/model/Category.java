@@ -39,7 +39,7 @@ public class Category {
 
     @Override
     public String toString() {
-        return String.format("|%-5s|%-15s|", id, name);
+        return String.format("| %-5s| %-15s|", id, name);
     }
     
     
