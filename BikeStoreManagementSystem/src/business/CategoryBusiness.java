@@ -19,13 +19,14 @@ import repository.CategoryRepository;
 public class CategoryBusiness {
 
     private CategoryRepository cateRepo;
-    Scanner sc = new Scanner(System.in);
+    Inputtor input;
     Random rd = new Random();
     private String cateIdRegex = "C\\d{3}";
     private String cateNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
 
     public CategoryBusiness() {
         cateRepo = new CategoryRepository();
+        input  = new Inputtor();
         cateRepo.readDataFromFile("Category.txt");
     }
 
@@ -57,7 +58,7 @@ public class CategoryBusiness {
 
     public String getCateIdFromConsole() {
         System.out.print("Enter Category ID: ");
-        String id = sc.nextLine();
+        String id = input.inputString();
         if (isValidCateIdFormat(id)) {
             return id;
         }
@@ -67,7 +68,7 @@ public class CategoryBusiness {
 
     public String getCateNameFromConsole() {
         System.out.print("Enter Category Name: ");
-        String name = sc.nextLine();
+        String name = input.inputString();
         if (isValidCateNameFormat(name)) {
             return name;
         }
@@ -97,6 +98,7 @@ public class CategoryBusiness {
         Category c = new Category(id, name);
         cateRepo.create(c);
         cateRepo.writeDataToFile("Category.txt");
+        showCateList();
     }
 
     public void showCateList() {

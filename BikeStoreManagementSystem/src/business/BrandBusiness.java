@@ -20,7 +20,7 @@ import repository.BrandRepository;
 public class BrandBusiness {
 
     private BrandRepository brandRepo;
-    Scanner sc = new Scanner(System.in);
+    Inputtor input;
     Random rd = new Random();
     private String brandIdRegex = "B\\d{3}";
     private String brandNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
@@ -28,6 +28,7 @@ public class BrandBusiness {
 
     public BrandBusiness() {
         brandRepo = new BrandRepository();
+        input = new Inputtor();
         brandRepo.readDataFromFile("Brand.txt");
     }
 
@@ -63,7 +64,7 @@ public class BrandBusiness {
 
     public String getBrandIdFromConsole() {
         System.out.print("Enter Brand ID: ");
-        String id = sc.nextLine();
+        String id = input.inputString();
         if (isValidBrandIdFormat(id)) {
             return id;
         }
@@ -73,7 +74,7 @@ public class BrandBusiness {
 
     public String getBrandNameFromConsole() {
         System.out.print("Enter Brand Name: ");
-        String name = sc.nextLine();
+        String name = input.inputString();
         if (isValidBrandNameFormat(name)) {
             return name;
         }
@@ -83,7 +84,7 @@ public class BrandBusiness {
 
     public String getBrandCountryFromConsole() {
         System.out.print("Enter Brand Country: ");
-        String country = sc.nextLine();
+        String country = input.inputString();
         if (isValidBrandCountryFormat(country)) {
             return country;
         }
@@ -114,6 +115,7 @@ public class BrandBusiness {
         Brand b = new Brand(id, name, country);
         brandRepo.create(b);
         brandRepo.writeDataToFile("Brand.txt");
+        showBrandList();
     }
 
     public void showBrandList() {
