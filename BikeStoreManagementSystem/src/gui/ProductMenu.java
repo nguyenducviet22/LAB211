@@ -23,14 +23,14 @@ public class ProductMenu {
         m.add("2. Search product by product name");
         m.add("3. Update product");
         m.add("4. Delete product");
-        m.add("5. Sort product ascending");
+        m.add("5. Sort product");
         m.add("6. Print list products from the file");
         m.add("0. Back to main menu");
 
         do {
             m.displayMenu();
             System.out.print("Enter your choice: ");
-            choice = sc.nextLine();
+            choice = sc.nextLine().trim();
 
             switch (choice) {
                 case "1":

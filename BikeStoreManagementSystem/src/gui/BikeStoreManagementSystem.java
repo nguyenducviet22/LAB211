@@ -24,16 +24,16 @@ public class BikeStoreManagementSystem {
         Scanner sc = new Scanner(System.in);
         
         Menu m = new Menu();
-        m.add("1. Product");
-        m.add("2. Brand");
-        m.add("3. Category");
+        m.add("1. Manage Product");
+        m.add("2. Manage Brand");
+        m.add("3. Manage Category");
         m.add("0. Exit!");
         String choice;
         
         do {            
             m.displayMenu();
             System.out.print("Enter your choice: ");
-            choice = sc.nextLine();
+            choice = sc.nextLine().trim();
             
             switch (choice) {
                 case "1":

@@ -27,7 +27,7 @@ public class BrandMenu {
         do {
             brandMenu.displayMenu();
             System.out.print("Enter your choice: ");
-            choice = sc.nextLine();
+            choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
                     brandBus.showBrandList();
