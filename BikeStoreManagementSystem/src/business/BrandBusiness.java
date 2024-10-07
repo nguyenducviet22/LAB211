@@ -7,7 +7,6 @@ package business;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.Brand;
@@ -20,15 +19,13 @@ import repository.BrandRepository;
 public class BrandBusiness {
 
     private BrandRepository brandRepo;
-    Inputtor input;
+    Inputtor ip;
     Random rd = new Random();
     private String brandIdRegex = "B\\d{3}";
-    private String brandNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
-    private String brandCountryRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
 
     public BrandBusiness() {
         brandRepo = new BrandRepository();
-        input = new Inputtor();
+        ip = new Inputtor();
         brandRepo.readDataFromFile("Brand.txt");
     }
 
@@ -54,44 +51,6 @@ public class BrandBusiness {
         return checkStringWithPattern(brandIdRegex, value);
     }
 
-    public boolean isValidBrandNameFormat(String value) {
-        return checkStringWithPattern(brandNameRegex, value);
-    }
-
-    public boolean isValidBrandCountryFormat(String value) {
-        return checkStringWithPattern(brandCountryRegex, value);
-    }
-
-    public String getBrandIdFromConsole() {
-        System.out.print("Enter Brand ID: ");
-        String id = input.inputString();
-        if (isValidBrandIdFormat(id)) {
-            return id;
-        }
-        System.out.println("Invalid Brand ID! Try again! Eg: B000");
-        return getBrandIdFromConsole();
-    }
-
-    public String getBrandNameFromConsole() {
-        System.out.print("Enter Brand Name: ");
-        String name = input.inputString();
-        if (isValidBrandNameFormat(name)) {
-            return name;
-        }
-        System.out.println("Invalid Brand Name! Try again! Eg: Nike");
-        return getBrandNameFromConsole();
-    }
-
-    public String getBrandCountryFromConsole() {
-        System.out.print("Enter Brand Country: ");
-        String country = input.inputString();
-        if (isValidBrandCountryFormat(country)) {
-            return country;
-        }
-        System.out.println("Invalid Brand Country! Try again! Eg: Vietnam");
-        return getBrandCountryFromConsole();
-    }
-
     public boolean isExistedId(String id) {
         for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
             if (entry.getValue().getId().equals(id)) {
@@ -99,6 +58,42 @@ public class BrandBusiness {
             }
         }
         return false;
+    }
+
+    public String getBrandIdFromConsole() {
+        String id = ip.inputString("Enter Brand ID: ");
+        if (isValidBrandIdFormat(id)) {
+            if (isExistedId(id)) {
+                return id;
+            }
+        }
+        System.out.println("Invalid Brand ID! Try again!");
+        return getBrandIdFromConsole();
+    }
+
+    public boolean isExistedName(String name) {
+        for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
+            if (entry.getValue().getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getBrandNameFromConsole() {
+        String name = ip.inputString("Enter Brand Name: ").trim();
+        if (name.equals("")) {
+            return "";
+        } else if (isExistedName(name)) {
+            return name;
+        }
+        System.out.println("Brand name is not existed!");
+        return getBrandNameFromConsole();
+    }
+
+    public String getBrandCountryFromConsole() {
+        String country = ip.inputString("Enter Brand Country: ");
+        return country;
     }
 
     public void createNewBrand() {
@@ -134,7 +129,7 @@ public class BrandBusiness {
     public void showHeadTable() {
         System.out.println("---------------------------------------");
         System.out.println("| ID   | Brand Name  | Country        |");
-        System.out.println("---------------------------------------");
+        System.out.println("|------|-------------|----------------|");
     }
 
     public void showFootTable() {

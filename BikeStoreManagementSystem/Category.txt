@@ -1,4 +1,3 @@
 C222,Road Bike
 C460,Electric Bike
-C885,Jfad
 C454,Mountain Bike

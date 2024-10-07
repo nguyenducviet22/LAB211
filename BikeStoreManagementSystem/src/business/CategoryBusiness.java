@@ -6,7 +6,6 @@ package business;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.Category;
@@ -22,11 +21,10 @@ public class CategoryBusiness {
     Inputtor input;
     Random rd = new Random();
     private String cateIdRegex = "C\\d{3}";
-    private String cateNameRegex = "[A-Z][a-z]+(\\s[A-Z][a-z]+)*";
 
     public CategoryBusiness() {
         cateRepo = new CategoryRepository();
-        input  = new Inputtor();
+        input = new Inputtor();
         cateRepo.readDataFromFile("Category.txt");
     }
 
@@ -52,28 +50,36 @@ public class CategoryBusiness {
         return checkStringWithPattern(cateIdRegex, value);
     }
 
-    public boolean isValidCateNameFormat(String value) {
-        return checkStringWithPattern(cateNameRegex, value);
-    }
-
     public String getCateIdFromConsole() {
-        System.out.print("Enter Category ID: ");
-        String id = input.inputString();
+        String id = input.inputString("Enter Category ID: ");
         if (isValidCateIdFormat(id)) {
-            return id;
+            if (isExistedId(id)) {
+                return id;
+            }
         }
         System.out.println("Invalid Category ID! Try again!");
         return getCateIdFromConsole();
     }
 
     public String getCateNameFromConsole() {
-        System.out.print("Enter Category Name: ");
-        String name = input.inputString();
-        if (isValidCateNameFormat(name)) {
+        String name = input.inputString("Enter Category Name: ");
+        if (name.equals("")) {
+            return "";
+        } else if (isExistedName(name)) {
             return name;
         }
-        System.out.println("Invalid Category Name! Try again!");
+        System.out.println("Category name is not existed!");
         return getCateNameFromConsole();
+    }
+
+    //To check existed or duplicated name
+    public boolean isExistedName(String name) {
+        for (Map.Entry<String, Category> entry : cateRepo.entrySet()) {
+            if (entry.getValue().getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isExistedId(String id) {
@@ -117,7 +123,7 @@ public class CategoryBusiness {
     public void showHeadTable() {
         System.out.println("-------------------------");
         System.out.println("| ID   | Category Name  |");
-        System.out.println("-------------------------");
+        System.out.println("|------|----------------|");
     }
 
     public void showFootTable() {

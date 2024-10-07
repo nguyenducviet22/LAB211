@@ -1,4 +1,3 @@
 B263,Specialized,United States
-B230,Specialized,Jdfas
 B743,Giant,Taiwan
 B634,Trek,United States

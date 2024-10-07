@@ -10,6 +10,7 @@ package model;
  * @author NGUYEN DUC VIET
  */
 public class Product {
+
     private String id;
     private String name;
     private String brand_id;
@@ -79,9 +80,8 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("| %-5s| %-25s| %-10s| %-13s| %-7s| %-13.2f|", 
-                id, name, getBrand_id(), getCategory_id(), model_year, list_price);
+        return String.format("| %-5s| %-25s| %-12s| %-15s| %-7s| %-13.2f|",
+                id, name, brand_id, category_id, model_year, list_price);
     }
-    
-    
+
 }
