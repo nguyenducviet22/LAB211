@@ -9,3 +9,4 @@ GUI: Menu
 Gui -> Buss -> Repo -> Model
 
 Slot 6: Review J1.24
+ko check name

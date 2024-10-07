@@ -1,0 +1,4 @@
+Regex do not allow to enter 'blank'
+Enter string
+if ("") => keep
+if (!"") => checkRegex
