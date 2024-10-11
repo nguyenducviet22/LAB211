@@ -165,6 +165,9 @@ public class ProductBusiness {
     //To search a product by entering a part of name, ignore case
     public void searchProByName() {
         String name = ip.inputString("Enter a part of product name to search: ").toLowerCase();
+        if (name.length() < 5){
+            name = ip.inputString("Enter a part of product name to search: ").toLowerCase();
+        }
         List<Product> list = new ArrayList<>();
         for (Map.Entry<String, Product> entry : proRepo.entrySet()) {
             if (entry.getValue().getName().toLowerCase().contains(name)) {

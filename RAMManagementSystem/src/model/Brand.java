@@ -10,25 +10,14 @@ package model;
  * @author ADMIN
  */
 public class Brand {
-    private String brandCode;
+
     private String brandName;
-    private String country;
 
     public Brand() {
     }
 
-    public Brand(String brandCode, String brandName, String country) {
-        this.brandCode = brandCode;
+    public Brand(String brandName) {
         this.brandName = brandName;
-        this.country = country;
-    }
-
-    public String getBrandCode() {
-        return brandCode;
-    }
-
-    public void setBrandCode(String brandCode) {
-        this.brandCode = brandCode;
     }
 
     public String getBrandName() {
@@ -39,18 +28,9 @@ public class Brand {
         this.brandName = brandName;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     @Override
     public String toString() {
-        return String.format("| %-4s | %-10s | %-12s |", brandCode, brandName, country);
+        return String.format("| %-10s |", brandName);
     }
-    
-    
+
 }

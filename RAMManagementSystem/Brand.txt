@@ -1,4 +1,4 @@
-B001,Corsair,USA
-B002,Kingston,China
-B003,Crucial,Vietnam
-B004,Samsung,Korea
+Corsair
+Kingston
+Crucial
+Samsung

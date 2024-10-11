@@ -19,7 +19,6 @@ import repository.BusRepository;
 public class BusBusiness {
 
     private BusRepository busRepo;
-    private String busCodeRegex = "S\\d{3}";
     Random rd = new Random();
     Inputtor ip;
 
@@ -33,64 +32,16 @@ public class BusBusiness {
         this.busRepo = busRepo;
     }
 
-    public boolean checkStringWithPattern(String regexPattern, String value) {
-        Pattern pattern = Pattern.compile(regexPattern);
-        Matcher matcher = pattern.matcher(value);
-        return matcher.matches();
-    }
-
-    public boolean isValidBusCode(String value) {
-        return checkStringWithPattern(busCodeRegex, value);
-    }
-
-    public boolean isExistedCode(String id) {
-        for (Map.Entry<String, Bus> entry : busRepo.entrySet()) {
-            if (entry.getValue().getBusCode().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public String generateBusCode() {
-        String code = "S" + rd.nextInt(900);
-        if (isValidBusCode(code)) {
-            if (!isExistedCode(code)) {
-                return code;
-            }
-        }
-        return generateBusCode();
-    }
-
-    public String getBusCodeFromConsole() {
-        String code = ip.inputString("Enter bus code: ");
-        if (isValidBusCode(code)) {
-            if (isExistedCode(code)) {
-                return code;
-            }
-        }
-        System.out.println("Not found bus code!");
-        return getBusCodeFromConsole();
-    }
-
-    public int getBusSpeedFromConsole() {
+    public String getBusSpeedFromConsole() {
         try {
             int speed = ip.inputInt("Enter bus speed: ");
             if (speed > 0) {
-                return speed;
+                return speed + "HMz";
             }
         } catch (Exception e) {
             System.out.println("Invalid bus speed! try again");
         }
         return getBusSpeedFromConsole();
-    }
-
-    public void addNewBus() {
-        String code = generateBusCode();
-        int speed = getBusSpeedFromConsole();
-
-        Bus b = new Bus(code, speed);
-        busRepo.create(b);
     }
 
     public void showBusList() {
@@ -104,14 +55,14 @@ public class BusBusiness {
             showFootTable();
         }
     }
-    
+
     public void showHeadTable() {
-        System.out.println("---------------------");
-        System.out.println("| Code | Bus Speed  |");
-        System.out.println("|-------------------|");
+        System.out.println("--------------");
+        System.out.println("| Bus Speed  |");
+        System.out.println("|------------|");
     }
 
     public void showFootTable() {
-        System.out.println("---------------------");
+        System.out.println("--------------");
     }
 }

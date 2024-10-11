@@ -19,7 +19,6 @@ import repository.TypeRepository;
 public class TypeBusiness {
 
     private TypeRepository typeRepo;
-    private String typeCodeRegex = "T\\d{3}";
     Random rd = new Random();
     Inputtor ip;
 
@@ -31,46 +30,6 @@ public class TypeBusiness {
 
     public TypeBusiness(TypeRepository typeRepo) {
         this.typeRepo = typeRepo;
-    }
-
-    public boolean checkStringWithPattern(String regexPattern, String value) {
-        Pattern pattern = Pattern.compile(regexPattern);
-        Matcher matcher = pattern.matcher(value);
-        return matcher.matches();
-    }
-
-    public boolean isValidTypeCode(String value) {
-        return checkStringWithPattern(typeCodeRegex, value);
-    }
-
-    public boolean isExistedCode(String id) {
-        for (Map.Entry<String, Type> entry : typeRepo.entrySet()) {
-            if (entry.getValue().getTypeCode().equals(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public String generateCode() {
-        String code = "T" + (rd.nextInt(900));
-        if (isValidTypeCode(code)) {
-            if (!isExistedCode(code)) {
-                return code;
-            }
-        }
-        return generateCode();
-    }
-
-    public String getTypeCodeFromConsole() {
-        String code = ip.inputString("Enter type code: ");
-        if (isValidTypeCode(code)) {
-            if (isExistedCode(code)) {
-                return code;
-            }
-        }
-        System.out.println("Not found type code!");
-        return getTypeCodeFromConsole();
     }
     
     public boolean isExistedName(String name){
@@ -91,14 +50,6 @@ public class TypeBusiness {
         return getTypeNameFromConsole();
     }
 
-    public void addNewType() {
-        String code = generateCode();
-        String name = getTypeNameFromConsole();
-
-        Type t = new Type(code, name);
-        typeRepo.create(t);
-    }
-
     public void showTypeList() {
         if (typeRepo.entrySet().isEmpty()) {
             System.out.println("Type list is empty!");
@@ -112,12 +63,12 @@ public class TypeBusiness {
     }
     
     public void showHeadTable() {
-        System.out.println("---------------------");
-        System.out.println("| Code | Type Name  |");
-        System.out.println("|-------------------|");
+        System.out.println("--------------");
+        System.out.println("| Type Name  |");
+        System.out.println("|------------|");
     }
 
     public void showFootTable() {
-        System.out.println("---------------------");
+        System.out.println("--------------");
     }
 }

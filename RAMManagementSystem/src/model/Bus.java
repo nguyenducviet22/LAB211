@@ -11,36 +11,26 @@ package model;
  */
 public class Bus {
 
-    private String busCode;
-    private int busSpeed;
+    private String busSpeed;
 
     public Bus() {
     }
 
-    public Bus(String busCode, int busSpeed) {
-        this.busCode = busCode;
+    public Bus(String busSpeed) {
         this.busSpeed = busSpeed;
     }
 
-    public String getBusCode() {
-        return busCode;
-    }
-
-    public void setBusCode(String busCode) {
-        this.busCode = busCode;
-    }
-
-    public int getBusSpeed() {
+    public String getBusSpeed() {
         return busSpeed;
     }
 
-    public void setBusSpeed(int busSpeed) {
+    public void setBusSpeed(String busSpeed) {
         this.busSpeed = busSpeed;
     }
 
     @Override
     public String toString() {
-        return String.format("| %-4s | %-10s |", busCode, busSpeed);
+        return String.format("| %-10s |", busSpeed);
     }
 
 }

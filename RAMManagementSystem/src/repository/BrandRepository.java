@@ -25,7 +25,7 @@ public class BrandRepository extends HashMap<String, Brand> implements ICRUD<Str
     @Override
     public int create(Brand newItem) {
         try {
-            this.put(newItem.getBrandCode(), newItem);
+            this.put(newItem.getBrandName(), newItem);
             return 1;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,7 +46,7 @@ public class BrandRepository extends HashMap<String, Brand> implements ICRUD<Str
     @Override
     public int update(Brand editItem) {
         try {
-            Brand oldItem = this.get(editItem.getBrandCode());
+            Brand oldItem = this.get(editItem.getBrandName());
             oldItem = editItem;
             return 1;
         } catch (Exception e) {
@@ -83,12 +83,10 @@ public class BrandRepository extends HashMap<String, Brand> implements ICRUD<Str
                 StringTokenizer stk = new StringTokenizer(line, ",");
 
                 // Cắt các thông tin thành phần
-                String _code = stk.nextToken();
                 String _name = stk.nextToken();
-                String _country = stk.nextToken();
 
                 // Tái tạo Java Object
-                Brand _br = new Brand(_code, _name, _country);
+                Brand _br = new Brand(_name);
 
                 // Đưa object vào Repository
                 this.create(_br);
@@ -119,7 +117,7 @@ public class BrandRepository extends HashMap<String, Brand> implements ICRUD<Str
             for (Map.Entry<String, Brand> entry : this.entrySet()) {
 //                System.out.println();
                 Brand item = entry.getValue();
-                pw.println(item.getBrandCode() + "," + item.getBrandName() + "," + item.getCountry());
+                pw.println(item.getBrandName());
             }
 
             pw.close();

@@ -6,13 +6,12 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import model.Brand;
-import model.Bus;
 import model.RAM;
-import model.Type;
 import repository.BrandRepository;
 import repository.BusRepository;
 import repository.RAMRepository;
@@ -33,7 +32,6 @@ public class RAMBusiness {
     private TypeRepository typeRepo;
     private BrandRepository brandRepo;
     private BusRepository busRepo;
-    private List<RAM> list;
     private RAM r;
 
     public RAMBusiness() {
@@ -45,7 +43,6 @@ public class RAMBusiness {
         typeRepo = new TypeRepository();
         brandRepo = new BrandRepository();
         busRepo = new BusRepository();
-        list = new ArrayList<>();
         r = new RAM();
         ramRepo.readDataFromFile("Ram.txt");
         typeRepo.readDataFromFile("Type.txt");
@@ -117,17 +114,16 @@ public class RAMBusiness {
 
     public void addAnItem() {
         typeBus.showTypeList();
-        String typeCode = typeBus.getTypeCodeFromConsole();
+        String typeName = typeBus.getTypeNameFromConsole();
         busBus.showBusList();
-        String busCode = busBus.getBusCodeFromConsole();
+        String busName = busBus.getBusSpeedFromConsole();
         brandBus.showBrandList();
-        String brandCode = brandBus.getBrandCodeFromConsole();
+        String brandName = brandBus.getBrandNameFromConsole();
         String qty = getQuantityFromConsole();
         while (qty.equals("")) {
             System.out.println("Quantity can not be empty!");
             qty = getQuantityFromConsole();
         }
-        //check valid mm-yyyy
         String date = getProductionDateFromConsole();
         while (date.equals("")) {
             System.out.println("Production date can not be empty!");
@@ -135,25 +131,23 @@ public class RAMBusiness {
         }
         String code;
         while (true) {
-            code = "RAM" + typeCode + "_" + (rd.nextInt(100) + 1);
+            code = "RAM" + typeName + "_" + (rd.nextInt(100) + 1);
             if (!isExistedCode(code)) {
                 break;
             }
         }
-        RAM r = new RAM(code, typeCode, busCode, brandCode, Integer.parseInt(qty), date, true);
+        RAM r = new RAM(code, typeName, busName, brandName, Integer.parseInt(qty), date, true);
         ramRepo.create(r);
     }
 
     private void searchByType() {
         typeBus.showTypeList();
-        transCodetoName();
-        String typeName = ip.inputString("Enter a part of type name to search: ").toLowerCase();
+        List<RAM> list = new ArrayList<>();
+        String typeName = ip.inputString("Enter a part of type name to search: ").toUpperCase();
         for (Map.Entry<String, RAM> entry : ramRepo.entrySet()) {
             if (entry.getValue().isActive()) {
-                if (entry.getValue().getType().toLowerCase().contains(typeName)) {
-                    //how to use toStringForSearch()
-                    r = new RAM(entry.getValue().getCode(), entry.getValue().getType(), entry.getValue().getQuantity(), entry.getValue().getProduction_month_year(), true);
-                    list.add(r);
+                if (entry.getValue().getType().contains(typeName)) {
+                    list.add(entry.getValue());
                 }
             }
         }
@@ -161,26 +155,55 @@ public class RAMBusiness {
             System.out.println("Have no any Ram!");
         } else {
             showHeadSearchTypeTable();
-            showAllItems(list);
+            for (RAM ram : list) {
+                System.out.println(ram.displaySearchByType());
+            }
             showFootSearchTypeTable();
         }
     }
 
     private void searchByBus() {
-        String bus = ip.inputString("Enter type name: ");
+        busBus.showBusList();
+        List<RAM> list = new ArrayList<>();
+        String bus = ip.inputString("Enter bus speed to search: ");
         for (Map.Entry<String, RAM> entry : ramRepo.entrySet()) {
-            if (entry.getValue().getBus().contains(bus)) {
-                list.add(entry.getValue());
+            if (entry.getValue().isActive()) {
+                if (entry.getValue().getBus().contains(bus)) {
+                    list.add(entry.getValue());
+                }
             }
+        }
+        if (list.isEmpty()) {
+            System.out.println("Have no nay Ram!");
+        } else {
+            showHeadSearchBusTable();
+            for (RAM ram : list) {
+                System.out.println(ram.displaySearchByBus());
+            }
+            showFootSearchBusTable();
         }
     }
 
     private void searchByBrand() {
-        String brand = ip.inputString("Enter type name: ");
+        brandBus.showBrandList();
+        List<RAM> list = new ArrayList<>();
+        String brand = ip.inputString("Enter a part of brand name to search: ").toLowerCase();
         for (Map.Entry<String, RAM> entry : ramRepo.entrySet()) {
-            if (entry.getValue().getBrand().contains(brand)) {
-                list.add(entry.getValue());
+            if (entry.getValue().isActive()) {
+                if (entry.getValue().getBrand().toLowerCase().contains(brand)) {
+                    list.add(entry.getValue());
+                }
             }
+        }
+
+        if (list.isEmpty()) {
+            System.out.println("Have no nay Ram!");
+        } else {
+            showHeadSearchBrandTable();
+            for (RAM ram : list) {
+                System.out.println(ram.displaySearchByBrand());
+            }
+            showFootSearchBrandTable();
         }
     }
 
@@ -233,88 +256,90 @@ public class RAMBusiness {
         int qty = r.getQuantity();
         String date = r.getProduction_month_year();
         boolean active = true;
-        try {
-            do {
-                System.out.println("");
-                System.out.println("--UPDATE INFO--");
-                System.out.println("1. Update type name");
-                System.out.println("2. Update bus speed");
-                System.out.println("3. Update brand name");
-                System.out.println("4. Update quantity");
-                System.out.println("5. Update production date");
-                System.out.println("6. Update active");
-                System.out.println("Other. Finish!");
 
-                while (true) {
-                    choice = ip.inputString("Enter your choice: ");
-                    if (!choice.equals("")) {
-                        break;
+        do {
+            System.out.println("");
+            System.out.println("--UPDATE INFO--");
+            System.out.println("1. Update type name");
+            System.out.println("2. Update bus speed");
+            System.out.println("3. Update brand name");
+            System.out.println("4. Update quantity");
+            System.out.println("5. Update production date");
+            System.out.println("6. Update active");
+            System.out.println("0. Finish!");
+
+            while (true) {
+                choice = ip.inputString("Enter your choice: ");
+                if (!choice.equals("")) {
+                    break;
+                }
+            }
+
+            switch (choice) {
+                case "1":
+                    typeBus.showTypeList();
+                    temp = typeBus.getTypeNameFromConsole();
+                    if (temp.equals("")) {
+                        System.out.println("Type has been unchanged!");
+                    } else {
+                        typeName = temp;
+                        code = "RAM" + typeName + code.substring(7);
                     }
-                }
-
-                switch (choice) {
-                    case "1":
-                        typeBus.showTypeList();
-                        temp = typeBus.getTypeCodeFromConsole();
-                        if (temp.equals("")) {
-                            System.out.println("Type has been unchanged!");
-                        } else {
-                            typeName = temp;
-                            code = "RAM" + typeName + code.substring(7);
-                        }
-                        break;
-                    case "2":
-                        busBus.showBusList();
-                        temp = busBus.getBusCodeFromConsole();
-                        if (temp.equals("")) {
-                            System.out.println("Bus has been unchanged!");
-                        } else {
-                            busName = temp;
-                        }
-                        break;
-                    case "3":
-                        brandBus.showBrandList();
-                        temp = brandBus.getBrandCodeFromConsole();
-                        if (temp.equals("")) {
-                            System.out.println("Brand has been unchanged!");
-                        } else {
-                            brandName = temp;
-                        }
-                        break;
-                    case "4":
-                        temp = getQuantityFromConsole();
-                        if (temp.equals("")) {
-                            System.out.println("Quantity has been unchanged!");
-                        } else {
-                            qty = Integer.parseInt(temp);
-                        }
-                        break;
-                    case "5":
-                        temp = getProductionDateFromConsole();
-                        if (temp.equals("")) {
-                            System.out.println("Production date has been unchanged!");
-                        } else {
-                            date = temp;
-                        }
-                        break;
-                    case "6":
-                        temp = ip.inputString("1. Active\n 2. Inactive\n");
-                        if (temp.equals("")) {
-                            System.out.println("Active has been unchanged!");
-                        } else if (temp.equals("1")) {
-                            active = true;
-                        } else if (temp.equals("2")) {
-                            active = false;
-                        } else {
-                            System.out.println("Invalid selection!");
-                        }
-                        break;
-                }
-            } while (Integer.parseInt(choice) > 0 && Integer.parseInt(choice) < 7);
-        } catch (Exception e) {
-            ramRepo.create(new RAM(code, typeName, busName, brandName, qty, date, active));
-            System.out.println("Update successfully!");
-        }
+                    break;
+                case "2":
+                    busBus.showBusList();
+                    temp = busBus.getBusSpeedFromConsole();
+                    if (temp.equals("")) {
+                        System.out.println("Bus has been unchanged!");
+                    } else {
+                        busName = temp;
+                    }
+                    break;
+                case "3":
+                    brandBus.showBrandList();
+                    temp = brandBus.getBrandNameFromConsole();
+                    if (temp.equals("")) {
+                        System.out.println("Brand has been unchanged!");
+                    } else {
+                        brandName = temp;
+                    }
+                    break;
+                case "4":
+                    temp = getQuantityFromConsole();
+                    if (temp.equals("")) {
+                        System.out.println("Quantity has been unchanged!");
+                    } else {
+                        qty = Integer.parseInt(temp);
+                    }
+                    break;
+                case "5":
+                    temp = getProductionDateFromConsole();
+                    if (temp.equals("")) {
+                        System.out.println("Production date has been unchanged!");
+                    } else {
+                        date = temp;
+                    }
+                    break;
+                case "6":
+                    temp = ip.inputString(" 1. Active\n 2. Inactive\n");
+                    if (temp.equals("")) {
+                        System.out.println("Active has been unchanged!");
+                    } else if (temp.equals("1")) {
+                        active = true;
+                    } else if (temp.equals("2")) {
+                        active = false;
+                    } else {
+                        System.out.println("Invalid selection!");
+                    }
+                    break;
+                case "0":
+                    break;
+                default:
+                    System.out.println("Invalid selection!");
+            }
+        } while (!choice.equals("0"));
+        ramRepo.create(new RAM(code, typeName, busName, brandName, qty, date, active));
+        System.out.println("Update successfully!");
     }
 
     public void deleteItem() {
@@ -350,74 +375,88 @@ public class RAMBusiness {
         }
     }
 
-    private String getTypeNameByCode(String code) {
-        for (Map.Entry<String, Type> entry : typeRepo.entrySet()) {
-            if (entry.getValue().getTypeCode().equals(code)) {
-                return entry.getValue().getTypeName();
-            }
-            if (entry.getValue().getTypeName().equals(code)) {
-                return entry.getValue().getTypeName();
-            }
-        }
-        return null;
-    }
-
-    private String getBusSpeedByCode(String code) {
-        for (Map.Entry<String, Bus> entry : busRepo.entrySet()) {
-            if (entry.getValue().getBusCode().equals(code)) {
-                return entry.getValue().getBusSpeed() + "";
-            }
-            if ((entry.getValue().getBusSpeed() + "MHz").equals(code)) {
-                return entry.getValue().getBusSpeed() + "";
-            }
-        }
-        return null;
-    }
-
-    private String getBrandNameByCode(String code) {
-        for (Map.Entry<String, Brand> entry : brandRepo.entrySet()) {
-            if (entry.getValue().getBrandCode().equals(code)) {
-                return entry.getValue().getBrandName();
-            }
-            if (entry.getValue().getBrandName().equals(code)) {
-                return entry.getValue().getBrandName();
-            }
-        }
-        return null;
-    }
-
-    private void transCodetoName() {
-        for (Map.Entry<String, RAM> entry : ramRepo.entrySet()) {
-            String typeName = getTypeNameByCode(entry.getValue().getType());
-            entry.getValue().setType(typeName);
-            String busSpeed = getBusSpeedByCode(entry.getValue().getBus());
-            entry.getValue().setBus(busSpeed + "MHz");
-            String brandName = getBrandNameByCode(entry.getValue().getBrand());
-            entry.getValue().setBrand(brandName);
-        }
-    }
-
     public void showAllItems() {
         if (ramRepo.entrySet().isEmpty()) {
             System.out.println("RAM list is empty!");
         } else {
-            transCodetoName();
-            showHeadTable();
+            List<RAM> list = new ArrayList<>();
             for (Map.Entry<String, RAM> entry : ramRepo.entrySet()) {
                 if (entry.getValue().isActive()) {
-                    System.out.println(entry.getValue());
+                    list.add(entry.getValue());
                 }
             }
-            showFootTable();
+            sortBySubMenu(list);
         }
     }
 
+    private void sortBySubMenu(List<RAM> list) {
+        String choice;
+        do {
+            System.out.println("");
+            System.out.println("1. Sort by type");
+            System.out.println("2. Sort by bus");
+            System.out.println("3. Sort by brand");
+            System.out.println("0. Back to the main menu");
+            choice = ip.inputString("Enter your choice: ");
+            switch (choice) {
+                case "1":
+                    sortByType(list);
+                    break;
+                case "2":
+                    sortByBus(list);
+                    break;
+                case "3":
+                    sortByBrand(list);
+                    break;
+                case "0":
+                    break;
+                default:
+                    System.out.println("Invalid selection!");
+            }
+        } while (!choice.equals("0"));
+    }
+
+    private void sortByType(List<RAM> list) {
+        Comparator<RAM> c = new Comparator<RAM>() {
+            @Override
+            public int compare(RAM o1, RAM o2) {
+                return o1.getType().compareTo(o2.getType());
+            }
+        };
+        Collections.sort(list, c);
+        showAllItems(list);
+    }
+
+    private void sortByBus(List<RAM> list) {
+        Comparator<RAM> c = new Comparator<RAM>() {
+            @Override
+            public int compare(RAM o1, RAM o2) {
+                return o1.getBus().compareTo(o2.getBus());
+            }
+        };
+        Collections.sort(list, c);
+        showAllItems(list);
+    }
+
+    private void sortByBrand(List<RAM> list) {
+        Comparator<RAM> c = new Comparator<RAM>() {
+            @Override
+            public int compare(RAM o1, RAM o2) {
+                return o1.getBrand().compareTo(o2.getBrand());
+            }
+        };
+        Collections.sort(list, c);
+        showAllItems(list);
+    }
+
     private void showAllItems(List<RAM> list) {
+        showHeadTable();
         for (RAM ram : list) {
             if (ram.isActive()) {
                 System.out.println(ram);
             }
         }
+        showFootTable();
     }
 
     public void storeDataToFile() {
@@ -425,43 +464,43 @@ public class RAMBusiness {
     }
 
     public void showHeadTable() {
-        System.out.println("-------------------------------------------------------------------------------------");
-        System.out.println("| RAM Code   | Type Name | Bus Speed | Brand Name | Qty  | Production date (mm-yyyy) |");
-        System.out.println("|------------------------------------------------------------------------------------|");
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println("| RAM Code     | Type Name | Bus Speed | Brand Name | Qty  | Production date (mm-yyyy) |");
+        System.out.println("---------------------------------------------------------------------------------------");
     }
 
     public void showFootTable() {
-        System.out.println("-------------------------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------------------------");
     }
 
     public void showHeadSearchTypeTable() {
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("| RAM Code   | Type Name | Qty  | Production date (mm-yyyy) |");
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("| RAM Code     | Type Name | Qty  | Production date (mm-yyyy) |");
+        System.out.println("---------------------------------------------------------------");
     }
 
     public void showFootSearchTypeTable() {
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------");
     }
 
     public void showHeadSearchBusTable() {
-        System.out.println("-------------------------------------------------------------");
-        System.out.println("| RAM Code   | Bus Name  | Qty  | Production date (mm-yyyy) |");
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("| RAM Code     | Bus Name  | Qty  | Production date (mm-yyyy) |");
+        System.out.println("---------------------------------------------------------------");
     }
 
     public void showFootSearchBusTable() {
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------");
     }
 
     public void showHeadSearchBrandTable() {
-        System.out.println("--------------------------------------------------------------");
-        System.out.println("| RAM Code   | Brand Name | Qty  | Production date (mm-yyyy) |");
-        System.out.println("--------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("| RAM Code     | Brand Name | Qty  | Production date (mm-yyyy) |");
+        System.out.println("----------------------------------------------------------------");
     }
 
     public void showFootSearchBrandTable() {
-        System.out.println("--------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------");
     }
 
 }
