@@ -11,23 +11,13 @@ package model;
  */
 public class Type {
 
-    private String typeCode;
     private String typeName;
 
     public Type() {
     }
 
-    public Type(String typeCode, String typeName) {
-        this.typeCode = typeCode;
+    public Type(String typeName) {
         this.typeName = typeName;
-    }
-
-    public String getTypeCode() {
-        return typeCode;
-    }
-
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
     }
 
     public String getTypeName() {
@@ -40,7 +30,7 @@ public class Type {
 
     @Override
     public String toString() {
-        return String.format("| %-4s | %-10s |", typeCode, typeName);
+        return String.format("| %-10s |", typeName);
     }
 
 }

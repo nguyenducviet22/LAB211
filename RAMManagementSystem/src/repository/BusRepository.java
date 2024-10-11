@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import model.Bus;
-import model.Type;
 
 /**
  *
@@ -25,7 +24,7 @@ public class BusRepository extends HashMap<String, Bus> implements ICRUD<String,
     @Override
     public int create(Bus newItem) {
         try {
-            this.put(newItem.getBusCode(), newItem);
+            this.put(newItem.getBusSpeed(), newItem);
             return 1;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,7 +45,7 @@ public class BusRepository extends HashMap<String, Bus> implements ICRUD<String,
     @Override
     public int update(Bus editItem) {
         try {
-            Bus oldItem = this.get(editItem.getBusCode());
+            Bus oldItem = this.get(editItem.getBusSpeed());
             oldItem = editItem;
             return 1;
         } catch (Exception e) {
@@ -83,11 +82,10 @@ public class BusRepository extends HashMap<String, Bus> implements ICRUD<String,
                 StringTokenizer stk = new StringTokenizer(line, ",");
 
                 // Cắt các thông tin thành phần
-                String _code = stk.nextToken();
                 String _speed = stk.nextToken();
 
                 // Tái tạo Java Object
-                Bus _br = new Bus(_code, Integer.parseInt(_speed));
+                Bus _br = new Bus(_speed);
 
                 // Đưa object vào Repository
                 this.create(_br);
@@ -118,7 +116,7 @@ public class BusRepository extends HashMap<String, Bus> implements ICRUD<String,
             for (Map.Entry<String, Bus> entry : this.entrySet()) {
 //                System.out.println();
                 Bus item = entry.getValue();
-                pw.println(item.getBusCode()+ "," + item.getBusSpeed());
+                pw.println(item.getBusSpeed());
             }
 
             pw.close();

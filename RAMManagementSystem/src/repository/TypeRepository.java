@@ -25,7 +25,7 @@ public class TypeRepository extends HashMap<String, Type> implements ICRUD<Strin
     @Override
     public int create(Type newItem) {
         try {
-            this.put(newItem.getTypeCode(), newItem);
+            this.put(newItem.getTypeName(), newItem);
             return 1;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,7 +46,7 @@ public class TypeRepository extends HashMap<String, Type> implements ICRUD<Strin
     @Override
     public int update(Type editItem) {
         try {
-            Type oldType = this.get(editItem.getTypeCode());
+            Type oldType = this.get(editItem.getTypeName());
             oldType = editItem;
             return 1;
         } catch (Exception e) {
@@ -83,11 +83,10 @@ public class TypeRepository extends HashMap<String, Type> implements ICRUD<Strin
                 StringTokenizer stk = new StringTokenizer(line, ",");
 
                 // Cắt các thông tin thành phần
-                String _code = stk.nextToken();
                 String _name = stk.nextToken();
 
                 // Tái tạo Java Object
-                Type _br = new Type(_code, _name);
+                Type _br = new Type(_name);
 
                 // Đưa object vào Repository
                 this.create(_br);
@@ -118,7 +117,7 @@ public class TypeRepository extends HashMap<String, Type> implements ICRUD<Strin
             for (Map.Entry<String, Type> entry : this.entrySet()) {
 //                System.out.println();
                 Type item = entry.getValue();
-                pw.println(item.getTypeCode()+ "," + item.getTypeName());
+                pw.println(item.getTypeName());
             }
 
             pw.close();

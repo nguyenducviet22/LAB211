@@ -98,13 +98,23 @@ public class RAM {
 
     @Override
     public String toString() {
-        return String.format("| %-10s | %-9s | %-9s | %-10s | %4s | %25s |",
+        return String.format("| %-12s | %-9s | %-9s | %-10s | %4s | %25s |",
                 code, type, bus, brand, quantity, production_month_year);
     }
     
-    public String toStringForSearch() {
-        return String.format("| %-10s | %-10s | %4s | %25s |",
+    public String displaySearchByType() {
+        return String.format("| %-12s | %-9s | %4s | %25s |",
                 code, type, quantity, production_month_year);
+    }
+    
+    public String displaySearchByBus() {
+        return String.format("| %-12s | %-9s | %4s | %25s |",
+                code, bus, quantity, production_month_year);
+    }
+    
+    public String displaySearchByBrand() {
+        return String.format("| %-12s | %-10s | %4s | %25s |",
+                code, brand, quantity, production_month_year);
     }
 
 }

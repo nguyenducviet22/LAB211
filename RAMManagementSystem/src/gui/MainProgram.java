@@ -53,7 +53,7 @@ public class MainProgram {
                     rb.storeDataToFile();
                     break;
                 case "7":
-                    System.out.println("Bye bye");
+                    System.out.println("Bye bye!");
                     break;
                 default:
                     System.out.println("Invalid selection!");
